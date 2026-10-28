@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XINIX Events — Where Night Comes Alive</title>
+  <meta name="description" content="XINIX Events produces electronic music nights, DJ & artist bookings and private invitation-only events. Tickets available through etathkara.">
+  <meta name="theme-color" content="#05060a">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/favicon.png" sizes="256x256" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="XINIX Events — Where Night Comes Alive">
+  <meta property="og:description" content="Electronic music. Unforgettable nights.">
+  <meta property="og:image" content="https://xinixevents.netlify.app/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 24h4M12 18v12M17 10v28M22 15v18M27 4v40M32 14v20M37 19v10M42 24h2"/></g></symbol>
+    <symbol id="i-headphones" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 28v-4a15 15 0 0 1 30 0v4"/><rect x="6" y="27" width="8" height="14" rx="3"/><rect x="34" y="27" width="8" height="14" rx="3"/></g></symbol>
+    <symbol id="i-layers" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><path d="M24 5 42 14 24 23 6 14z"/><path d="M6 22l18 9 18-9"/><path d="M6 30l18 9 18-9"/></g></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></g></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></g></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></g></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></g></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></g></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#events">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="top">
+  <div class="header__in">
+    <a class="brand" href="#top" aria-label="XINIX Events — home">
+      <img src="assets/logo-full.png" alt="XINIX Events">
+    </a>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="#events" data-nav="events">Events</a>
+      <a href="#experience" data-nav="experience">Experience</a>
+      <a href="#about" data-nav="about">About</a>
+      <a href="#contact" data-nav="contact">Contact</a>
+    </nav>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="stage" id="stage" aria-hidden="true">
+    <svg id="stage-svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="haze" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#5b2bd9" stop-opacity=".55"/>
+          <stop offset=".55" stop-color="#2a1170" stop-opacity=".22"/>
+          <stop offset="1" stop-color="#05060a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="fogM" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#e02bf5" stop-opacity=".75"/>
+          <stop offset="1" stop-color="#e02bf5" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="fogC" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#19e6f2" stop-opacity=".55"/>
+          <stop offset="1" stop-color="#19e6f2" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="ringG" x1="0" x2="1">
+          <stop offset="0" stop-color="#d12bf2"/>
+          <stop offset=".5" stop-color="#8b5cff"/>
+          <stop offset="1" stop-color="#ff5ce1"/>
+        </linearGradient>
+        <linearGradient id="screenG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0b0f1d"/>
+          <stop offset="1" stop-color="#150a2c"/>
+        </linearGradient>
+        <pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse">
+          <circle cx="4.5" cy="4.5" r="1.1" fill="#8fb4ff" fill-opacity=".16"/>
+        </pattern>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
+        <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="46"/></filter>
+        <filter id="beamBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+      </defs>
+
+      <rect width="1600" height="1000" fill="#04050a"/>
+      <ellipse cx="1020" cy="430" rx="640" ry="400" fill="url(#haze)"/>
+
+      <!-- truss -->
+      <g stroke="#141a26" stroke-width="3" fill="none" opacity=".9">
+        <path d="M640 0 800 205M1400 0 1230 200M900 0v210M1140 0v200"/>
+        <path d="M690 40h640M720 90h560" stroke-width="2"/>
+      </g>
+
+      <!-- beams -->
+      <g id="beams" style="mix-blend-mode:screen"></g>
+
+      <!-- ring -->
+      <g class="ring">
+        <ellipse cx="1020" cy="165" rx="300" ry="70" fill="none" stroke="url(#ringG)" stroke-width="12" opacity=".7" filter="url(#glow)"/>
+        <ellipse cx="1020" cy="165" rx="300" ry="70" fill="none" stroke="#2a1648" stroke-width="5"/>
+        <ellipse class="ring__dash" cx="1020" cy="165" rx="300" ry="70" fill="none" stroke="url(#ringG)" stroke-width="5" stroke-linecap="round" stroke-dasharray="150 60 90 40"/>
+      </g>
+
+      <!-- LED screen -->
+      <g class="screen">
+        <rect x="850" y="222" width="340" height="268" fill="url(#screenG)" stroke="#232a40" stroke-width="2"/>
+        <rect x="850" y="222" width="340" height="268" fill="url(#dots)"/>
+        <rect x="850" y="222" width="340" height="268" fill="none" stroke="#6ea8ff" stroke-opacity=".18" stroke-width="1"/>
+        <image href="assets/logo-mark.png" x="964" y="236" width="112" height="236" class="screen__logo"/>
+      </g>
+
+      <!-- fog behind DJ -->
+      <g filter="url(#soft)">
+        <ellipse class="fog fog--m" cx="760" cy="600" rx="330" ry="120" fill="url(#fogM)"/>
+        <ellipse class="fog fog--c" cx="1300" cy="610" rx="280" ry="110" fill="url(#fogC)"/>
+        <ellipse class="fog fog--v" cx="1030" cy="580" rx="320" ry="90" fill="#7a35ff" opacity=".35"/>
+      </g>
+
+      <!-- DJ booth -->
+      <g class="dj">
+        <rect x="930" y="598" width="220" height="46" rx="3" fill="#05070b" stroke="#19e6f2" stroke-opacity=".55"/>
+        <rect x="930" y="598" width="220" height="3" fill="#19e6f2" opacity=".8"/>
+        <g fill="#19e6f2" opacity=".85">
+          <rect x="946" y="614" width="26" height="4"/><rect x="982" y="614" width="14" height="4" fill="#d12bf2"/>
+          <rect x="1004" y="614" width="14" height="4" fill="#d12bf2"/><rect x="1026" y="614" width="14" height="4"/>
+          <rect x="1052" y="614" width="14" height="4" fill="#d12bf2"/><rect x="1080" y="614" width="26" height="4"/>
+        </g>
+        <path d="M996 600c3-32 19-48 44-48s41 16 44 48z" fill="#000"/>
+        <circle cx="1040" cy="536" r="16" fill="#000"/>
+        <path d="M1022 534a18 18 0 0 1 36 0" fill="none" stroke="#cfe9ee" stroke-width="3" stroke-linecap="round"/>
+        <rect x="1017" y="531" width="7" height="13" rx="3" fill="#cfe9ee"/><rect x="1056" y="531" width="7" height="13" rx="3" fill="#cfe9ee"/>
+      </g>
+
+      <!-- crowd -->
+      <g id="crowd"></g>
+    </svg>
+  </div>
+
+  <div class="hero__content">
+    <h1 class="hero__title">Where Night<br>Comes <span class="accent">Alive</span></h1>
+    <span class="bar" aria-hidden="true"></span>
+    <p class="hero__sub">Electronic music. Unforgettable nights.</p>
+    <a class="btn btn--outline" href="#events">Explore XINIX
+      <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </a>
+  </div>
+
+  <div class="cards" id="services">
+    <article class="card">
+      <svg class="card__ico" aria-hidden="true"><use href="#i-wave"/></svg>
+      <div>
+        <h2 class="card__t">Live Experiences</h2>
+        <span class="bar bar--sm" aria-hidden="true"></span>
+        <p>Curated electronic music events with world-class production.</p>
+      </div>
+    </article>
+    <article class="card">
+      <svg class="card__ico" aria-hidden="true"><use href="#i-headphones"/></svg>
+      <div>
+        <h2 class="card__t">DJ &amp; Artist Bookings</h2>
+        <span class="bar bar--sm" aria-hidden="true"></span>
+        <p>Professional DJ and artist bookings for clubs, festivals, and brands.</p>
+      </div>
+    </article>
+    <article class="card">
+      <svg class="card__ico" aria-hidden="true"><use href="#i-layers"/></svg>
+      <div>
+        <h2 class="card__t">Private Events</h2>
+        <span class="bar bar--sm" aria-hidden="true"></span>
+        <p>Tailored music experiences for exclusive and corporate occasions.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <span class="ticker__line"></span>
+  <span class="ticker__txt">Sound <i></i> Light <i></i> Energy <i></i> Xinix</span>
+  <span class="ticker__line"></span>
+</div>
+
+<!-- ============ EVENTS ============ -->
+<section class="section" id="events">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="eyebrow">Tickets</span>
+      <h2>Upcoming Events</h2>
+      <span class="bar" aria-hidden="true"></span>
+      <p class="lead">Every public night, in one place. Tickets are sold securely through <strong>etathkara</strong> — tap an event and you'll be taken straight to checkout.</p>
+    </header>
+
+    <div class="events" id="events-grid"></div>
+
+    <div class="empty reveal" id="events-empty">
+      <img src="assets/logo-n.png" alt="" class="empty__logo">
+      <h3>First lineup dropping soon</h3>
+      <p>We're preparing our next nights. Follow us to be the first to know when tickets go live.</p>
+      <div class="empty__cta">
+        <a class="btn btn--outline" data-social="instagram" href="#contact" target="_blank" rel="noopener">
+          <svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg> Instagram
+        </a>
+        <a class="btn btn--outline" data-social="whatsapp" href="#contact" target="_blank" rel="noopener">
+          <svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg> WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <div class="tickets-note reveal">
+      <svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg>
+      <p>Ticketing partner: <strong>etathkara</strong>. You'll complete payment on their platform and receive your ticket there.</p>
+      <a class="btn btn--solid" id="all-tickets" href="#" target="_blank" rel="noopener" hidden>Browse all tickets
+        <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section class="section section--alt" id="experience">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="eyebrow">Experience</span>
+      <h2>Two Ways To Xinix</h2>
+      <span class="bar" aria-hidden="true"></span>
+      <p class="lead">From open-door nights to guest-list-only gatherings, every event is built around the same standard: sound, light and a crowd that feels it.</p>
+    </header>
+
+    <div class="duo">
+      <article class="panel reveal">
+        <span class="panel__tag"><svg class="ico" aria-hidden="true"><use href="#i-ticket"/></svg> Public Events</span>
+        <h3>Open to everyone</h3>
+        <p>Ticketed electronic music nights with headline DJs, immersive lighting and full-scale production.</p>
+        <ul class="ticks">
+          <li>Headline DJs and live acts</li>
+          <li>Premium sound, lighting &amp; visuals</li>
+          <li>Secure ticketing through etathkara</li>
+        </ul>
+        <a class="link" href="#events">See upcoming events <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
+
+      <article class="panel panel--private reveal">
+        <span class="panel__tag"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg> Private Events</span>
+        <h3>By invitation only</h3>
+        <p>Exclusive gatherings for select guest lists — brand launches, corporate evenings and private celebrations.</p>
+        <ul class="ticks">
+          <li>Concept, production and artist booking</li>
+          <li>Guest list &amp; invitation management</li>
+          <li>Discreet, tailored service end to end</li>
+        </ul>
+        <a class="link" href="#invite">Request an invitation <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
+    </div>
+
+    <div class="invite reveal" id="invite">
+      <div class="invite__copy">
+        <span class="eyebrow">Private &amp; Invitation Events</span>
+        <h3>Request an Invitation or Plan an Event</h3>
+        <span class="bar" aria-hidden="true"></span>
+        <p>Tell us a little about what you have in mind. Our team will review your request and get back to you personally.</p>
+      </div>
+
+      <form class="form" name="private-invite" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" id="invite-form">
+        <input type="hidden" name="form-name" value="private-invite">
+        <input type="hidden" name="subject" value="New XINIX request from %{formName}">
+        <p class="sr-only"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+        <div class="grid2">
+          <label class="field"><span>Full name</span>
+            <input type="text" name="name" required autocomplete="name" placeholder="Your name"></label>
+          <label class="field"><span>Email</span>
+            <input type="email" name="email" required autocomplete="email" placeholder="you@email.com"></label>
+          <label class="field"><span>Phone / WhatsApp</span>
+            <input type="tel" name="phone" autocomplete="tel" placeholder="+000 0000 0000"></label>
+          <label class="field"><span>I'm interested in</span>
+            <select name="interest" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Invitation to a private event</option>
+              <option>Hosting a private event</option>
+              <option>Corporate / brand event</option>
+              <option>DJ or artist booking</option>
+              <option>Something else</option>
+            </select></label>
+          <label class="field"><span>Preferred date</span>
+            <input type="date" name="date"></label>
+          <label class="field"><span>Expected guests</span>
+            <input type="number" name="guests" min="1" inputmode="numeric" placeholder="e.g. 80"></label>
+        </div>
+        <label class="field"><span>Message</span>
+          <textarea name="message" rows="4" placeholder="Tell us about the occasion, venue ideas, music style…"></textarea></label>
+
+        <div class="form__foot">
+          <button class="btn btn--solid" type="submit">Send request
+            <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <p class="form__msg" id="form-msg" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY (hidden until photos are added in config.js) ============ -->
+<section class="section" id="gallery" hidden>
+  <div class="wrap">
+    <header class="sec-head">
+      <span class="eyebrow">Gallery</span>
+      <h2>Moments</h2>
+      <span class="bar" aria-hidden="true"></span>
+    </header>
+    <div class="gallery" id="gallery-grid"></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <div class="wrap about">
+    <header class="sec-head reveal">
+      <span class="eyebrow">About</span>
+      <h2>A Night Is An Experience</h2>
+      <span class="bar" aria-hidden="true"></span>
+    </header>
+
+    <div class="about__body reveal">
+      <p class="about__big">XINIX Events is an event production and entertainment company built on one idea: a night out should feel like something you were part of, not just somewhere you went.</p>
+      <p>We curate electronic music nights, book the DJs and artists who define the sound, and design every detail of the room around them — from stage and lighting to crowd flow, safety and guest care.</p>
+      <p>Whether it's a ticketed public night or an invitation-only gathering for a select guest list, we plan with the same discipline: clear communication, polished production and an atmosphere people remember long after the last track.</p>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar reveal"><span class="pillar__n">01</span><h3>Sound</h3><p>Professional audio tuned to the room and to the artist on stage.</p></div>
+      <div class="pillar reveal"><span class="pillar__n">02</span><h3>Light</h3><p>Lighting and visuals designed to move with every build and drop.</p></div>
+      <div class="pillar reveal"><span class="pillar__n">03</span><h3>Energy</h3><p>Hospitality, flow and detail that keep the whole night alive.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section section--alt" id="contact">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="eyebrow">Contact</span>
+      <h2>Let's Build Your Night</h2>
+      <span class="bar" aria-hidden="true"></span>
+      <p class="lead">Bookings, partnerships, private events or tickets — reach us the way that suits you.</p>
+    </header>
+
+    <div class="contact">
+      <a class="contact__card reveal" data-social="whatsapp" href="#contact" target="_blank" rel="noopener">
+        <svg class="contact__ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+        <span class="contact__k">WhatsApp</span>
+        <span class="contact__v" data-label="whatsapp">Coming soon</span>
+      </a>
+      <a class="contact__card reveal" data-social="instagram" href="#contact" target="_blank" rel="noopener">
+        <svg class="contact__ico" aria-hidden="true"><use href="#i-instagram"/></svg>
+        <span class="contact__k">Instagram</span>
+        <span class="contact__v" data-label="instagram">Coming soon</span>
+      </a>
+      <a class="contact__card reveal" data-social="email" href="#contact">
+        <svg class="contact__ico" aria-hidden="true"><use href="#i-mail"/></svg>
+        <span class="contact__k">Email</span>
+        <span class="contact__v" data-label="email">Coming soon</span>
+      </a>
+    </div>
+
+    <ul class="extra" id="extra"></ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__in">
+    <a class="footer__brand" href="#top" aria-label="Back to top">
+      <img src="assets/logo-mark.png" alt="XINIX Events">
+    </a>
+    <nav class="footer__nav" aria-label="Footer">
+      <a href="#events">Events</a><a href="#experience">Experience</a><a href="#about">About</a><a href="#contact">Contact</a>
+    </nav>
+    <p class="footer__copy">© <span id="year">2026</span> XINIX Events. All rights reserved. Tickets sold via etathkara.</p>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="events.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
