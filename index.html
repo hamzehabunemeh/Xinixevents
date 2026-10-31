@@ -114,7 +114,7 @@ button{font:inherit;color:inherit}
 .stage{position:absolute;inset:0;z-index:-2;background:var(--ink)}
 .stage canvas,.stage svg,.stage__photo{position:absolute;inset:0;width:100%;height:100%}
 .stage__photo{object-fit:cover;opacity:.55}
-.stage.has-photo svg{display:none}
+.stage.has-photo svg,.stage.has-photo canvas{display:none}
 .hero__shade{position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:linear-gradient(90deg,rgba(3,4,9,.95) 0%,rgba(3,4,9,.78) 24%,rgba(3,4,9,.2) 52%,rgba(3,4,9,0) 70%),
              linear-gradient(180deg,rgba(3,4,9,.75) 0%,rgba(3,4,9,0) 22%,rgba(3,4,9,0) 60%,rgba(3,4,9,.95) 100%)}
@@ -436,26 +436,8 @@ button{font:inherit;color:inherit}
       <ellipse cx="1020" cy="165" rx="300" ry="70" fill="none" stroke="url(#ringG)" stroke-width="12" opacity=".75" filter="url(#glow)"/>
       <ellipse cx="1020" cy="165" rx="300" ry="70" fill="none" stroke="#2a1648" stroke-width="5"/>
       <ellipse class="ring__dash" cx="1020" cy="165" rx="300" ry="70" fill="none" stroke="url(#ringG)" stroke-width="5" stroke-linecap="round" stroke-dasharray="150 60 90 40"/>
-      <!-- LED wall -->
-      <g>
-        <rect x="846" y="218" width="348" height="276" fill="none" stroke="#7b4dff" stroke-opacity=".55" stroke-width="3" filter="url(#glow)"/>
-        <rect x="850" y="222" width="340" height="268" fill="url(#screenG)" stroke="#2b3350" stroke-width="2"/>
-        <rect class="led-a" x="850" y="222" width="340" height="268" fill="url(#ledA)"/>
-        <rect class="led-b" x="850" y="222" width="340" height="268" fill="url(#ledB)"/>
-        <rect x="850" y="222" width="340" height="268" fill="url(#dots)"/>
-        <image href="assets/logo-mark.png" x="964" y="236" width="112" height="236" class="screen__logo"/>
-      </g>
-      <!-- DJ booth -->
-      <g>
-        <rect x="930" y="598" width="220" height="46" rx="3" fill="#05070b" stroke="#2ff3ff" stroke-opacity=".6"/>
-        <rect x="930" y="598" width="220" height="3" fill="#2ff3ff" opacity=".9"/>
-        <g fill="#2ff3ff" opacity=".9"><rect x="946" y="614" width="26" height="4"/><rect x="982" y="614" width="14" height="4" fill="#e83cff"/><rect x="1004" y="614" width="14" height="4" fill="#e83cff"/><rect x="1026" y="614" width="14" height="4"/><rect x="1052" y="614" width="14" height="4" fill="#e83cff"/><rect x="1080" y="614" width="26" height="4"/></g>
-        <path d="M996 600c3-32 19-48 44-48s41 16 44 48z" fill="#000"/><circle cx="1040" cy="536" r="16" fill="#000"/>
-        <path d="M1022 534a18 18 0 0 1 36 0" fill="none" stroke="#cfe9ee" stroke-width="3" stroke-linecap="round"/>
-        <rect x="1017" y="531" width="7" height="13" rx="3" fill="#cfe9ee"/><rect x="1056" y="531" width="7" height="13" rx="3" fill="#cfe9ee"/>
-      </g>
-      <g id="crowd"></g>
     </svg>
+    <canvas id="fx2"></canvas>
   </div>
   <div class="hero__shade"></div>
 
@@ -763,36 +745,16 @@ button{font:inherit;color:inherit}
     $$('.card').forEach(function (c) { c.addEventListener('pointermove', function (e) { var r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); });
   }
 
-  /* ---------- Hero stage ---------- */
-  var stage = $('#stage'), svg = $('#stage-svg'), cv = $('#fx'), ctx = cv.getContext('2d');
+  /* ---------- Hero stage (two canvases: back = light + LED wall, front = DJ + crowd + haze) ---------- */
+  var stage = $('#stage'), svg = $('#stage-svg'), cv = $('#fx'), ctx = cv.getContext('2d'), cv2 = $('#fx2'), c2 = cv2.getContext('2d');
   var vb = { x: 0, y: 0, w: 1600, h: 1000 }, SW = 0, SH = 0, dpr = 1;
   if (CFG.heroImage) { var ph = document.createElement('img'); ph.className = 'stage__photo'; ph.alt = ''; ph.src = CFG.heroImage; stage.insertBefore(ph, cv); stage.classList.add('has-photo'); }
 
   function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  function el(n, a, p) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
-  (function crowd() {
-    var g = $('#crowd'), r = rng(20261028);
-    [{ y: 668, s: .62, f: '#150e2e', st: 22, a: .55 }, { y: 730, s: .8, f: '#0b0720', st: 28, a: .5 }, { y: 805, s: 1.02, f: '#04030b', st: 38, a: .4 }, { y: 890, s: 1.35, f: '#010103', st: 54, a: .3 }].forEach(function (row) {
-      var grp = el('g', {}, g);
-      el('rect', { x: -10, y: row.y + 36 * row.s, width: 1620, height: 1100, fill: row.f }, grp);
-      for (var x = -30; x < 1650; x += row.st * (.75 + r() * .5)) {
-        var cy = row.y + (r() - .5) * 26 * row.s, hr = 17 * row.s * (.9 + r() * .2);
-        if (r() < row.a) {
-          var up = (80 + r() * 100) * row.s, dx = (r() - .5) * 70 * row.s, sd = r() < .5 ? -1 : 1, sx = x + sd * 16 * row.s, sy = cy + 34 * row.s;
-          var ag = el('g', { 'class': 'arm', style: 'animation-duration:' + (1.6 + r() * 1.6).toFixed(2) + 's;animation-delay:-' + (r() * 3).toFixed(2) + 's' }, grp);
-          el('path', { d: 'M' + sx + ' ' + sy + ' L' + (sx + dx) + ' ' + (sy - up), stroke: row.f, 'stroke-width': 10 * row.s, 'stroke-linecap': 'round', fill: 'none' }, ag);
-          el('circle', { cx: sx + dx, cy: sy - up - 4 * row.s, r: 7 * row.s, fill: row.f }, ag);
-        }
-        el('ellipse', { cx: x, cy: cy + 44 * row.s, rx: 36 * row.s, ry: 44 * row.s, fill: row.f }, grp);
-        el('circle', { cx: x, cy: cy, r: hr, fill: row.f }, grp);
-      }
-    });
-  })();
-
   function toPx(x, y) { var s = Math.max(SW / vb.w, SH / vb.h), ox = (SW - vb.w * s) / 2, oy = (SH - vb.h * s) / 2; return { x: (x - vb.x) * s + ox, y: (y - vb.y) * s + oy, s: s }; }
+  function lerp(a, b, k) { return a + (b - a) * k; }
 
-  /* light-show canvas */
-  var BEAMS = [ // sx,sy -> tx,ty (svg units), rgb, alpha, sweep, speed, end half-width
+  var BEAMS = [ // sx,sy -> tx,ty (design units), rgb, alpha, sweep, speed, end half-width
     [430, -40, 960, 470, '47,243,255', .9, .16, .5, 90], [1560, -10, 1290, 400, '47,243,255', .8, .14, .42, 70],
     [1680, 470, 1330, 600, '232,60,255', .75, .12, .6, 90], [-60, 520, 640, 640, '232,60,255', .7, .12, .5, 100],
     [1000, -30, 1010, 420, '123,77,255', .85, .1, .7, 50], [700, -40, 1000, 380, '47,243,255', .55, .18, .9, 40], [1330, -40, 1060, 400, '232,60,255', .55, .18, .8, 40]
@@ -800,8 +762,37 @@ button{font:inherit;color:inherit}
   var sprites = {}, parts = [], mouse = { x: .5, y: .5, tx: .5, ty: .5 }, running = true, T0 = performance.now();
   function sprite(rgb) { var c = document.createElement('canvas'); c.width = c.height = 64; var x = c.getContext('2d'), g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, 'rgba(' + rgb + ',1)'); g.addColorStop(.25, 'rgba(' + rgb + ',.45)'); g.addColorStop(1, 'rgba(' + rgb + ',0)'); x.fillStyle = g; x.fillRect(0, 0, 64, 64); return c; }
   sprites.c = sprite('47,243,255'); sprites.m = sprite('232,60,255'); sprites.w = sprite('235,240,255');
-  function initParts() { var n = SW < 700 ? 38 : 90, r = rng(7); parts = []; for (var i = 0; i < n; i++) { var k = r(); parts.push({ x: r() * SW, y: r() * SH, v: .01 + r() * .05, s: 4 + r() * (r() < .15 ? 46 : 16), a: .12 + r() * .5, ph: r() * 6.28, sp: .4 + r() * 1.2, c: k < .4 ? 'c' : k < .75 ? 'm' : 'w' }); } }
-  function fxResize() { dpr = Math.min(window.devicePixelRatio || 1, 1.5); cv.width = Math.round(SW * dpr); cv.height = Math.round(SH * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); initParts(); if (reduce) frame(3); }
+
+  /* logo for the LED wall: white + tinted copies for colour fringing + tiny copy for bloom */
+  var logoImg = new Image(), logoTints = null, logoGlow = null;
+  logoImg.onload = function () {
+    function tint(col) { var c = document.createElement('canvas'); c.width = logoImg.naturalWidth; c.height = logoImg.naturalHeight; var x = c.getContext('2d'); x.drawImage(logoImg, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, c.width, c.height); return c; }
+    logoTints = { c: tint('#2ff3ff'), m: tint('#ff3df2') };
+    var gw = 14, gh = Math.round(40 * logoImg.naturalHeight / logoImg.naturalWidth); logoGlow = document.createElement('canvas'); logoGlow.width = gw; logoGlow.height = gh; logoGlow.getContext('2d').drawImage(logoImg, 0, 0, gw, gh);
+    if (reduce) renderAll(3);
+  };
+  logoImg.src = 'assets/logo-mark.png';
+  var gridPat = (function () { var g = document.createElement('canvas'); g.width = g.height = 4; var x = g.getContext('2d'); x.fillStyle = 'rgba(0,0,0,.5)'; x.fillRect(3, 0, 1, 4); x.fillRect(0, 3, 4, 1); return ctx.createPattern(g, 'repeat'); })();
+  var wallC = document.createElement('canvas'), wx = wallC.getContext('2d');
+
+  /* crowd: people are generated once, drawn every frame (bobbing to the beat, waving arms, phone lights) */
+  var ROWS = [
+    { y: 648, s: .55, f: '#1b1340', st: 17, a: .6, rim: .6, seed: 11 }, { y: 700, s: .68, f: '#130d2f', st: 21, a: .55, rim: .55, seed: 12 },
+    { y: 760, s: .85, f: '#0b0821', st: 27, a: .5, rim: .5, seed: 13 }, { y: 830, s: 1.05, f: '#05030d', st: 36, a: .42, rim: .38, seed: 14 },
+    { y: 915, s: 1.4, f: '#010102', st: 52, a: .3, rim: .22, seed: 15 }, { y: 1015, s: 1.9, f: '#000000', st: 84, a: .2, rim: .12, seed: 16 }
+  ];
+  function initPeople() {
+    ROWS.forEach(function (row) {
+      var r = rng(row.seed), step = row.st * (SW < 700 ? 1.45 : 1); row.people = [];
+      for (var x = -30; x < 1650; x += step * (.75 + r() * .5)) {
+        row.people.push({ x: x, y: row.y + (r() - .5) * 26 * row.s, hr: 17 * (.9 + r() * .2), ph: r() * 6.28, arm: r() < row.a ? (r() < .3 ? 2 : 1) : 0, side: r() < .5 ? -1 : 1,
+          up: [70 + r() * 90, 60 + r() * 90], dx: [(r() - .5) * 40, (r() - .5) * 40], w: 1.4 + r() * 1.6, hair: r() < .28, phone: r() < .1 ? 0 : -1 });
+      }
+    });
+  }
+  function initParts() { var n = SW < 700 ? 30 : 70, r = rng(7); parts = []; for (var i = 0; i < n; i++) { var k = r(); parts.push({ x: r() * SW, y: r() * SH, v: .01 + r() * .05, s: 4 + r() * (r() < .15 ? 46 : 16), a: .12 + r() * .5, ph: r() * 6.28, sp: .4 + r() * 1.2, c: k < .4 ? 'c' : k < .75 ? 'm' : 'w' }); } }
+  function sizeCanvas(c, g) { c.width = Math.round(SW * dpr); c.height = Math.round(SH * dpr); g.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  function fxResize() { dpr = Math.min(window.devicePixelRatio || 1, 1.5); sizeCanvas(cv, ctx); sizeCanvas(cv2, c2); initParts(); initPeople(); if (reduce) renderAll(3); }
   function fitStage() {
     var b = stage.getBoundingClientRect(); SW = b.width; SH = b.height; if (!SW || !SH) return;
     var a = SW / SH;
@@ -810,41 +801,175 @@ button{font:inherit;color:inherit}
     svg.setAttribute('viewBox', vb.x.toFixed(1) + ' 0 ' + vb.w.toFixed(1) + ' 1000');
     fxResize();
   }
-  function frame(t) {
+
+  function drawBeam(g, b, i, t, pulse, mul) {
+    var s = toPx(b[0], b[1]), e0 = toPx(b[2], b[3]), dx = e0.x - s.x, dy = e0.y - s.y, dist = Math.hypot(dx, dy);
+    var ang = Math.atan2(dy, dx) + Math.sin(t * b[6] * 6 + i * 1.7) * b[7] + (mouse.x - .5) * .12;
+    var len = dist * 1.55, ex = s.x + Math.cos(ang) * len, ey = s.y + Math.sin(ang) * len, nx = -Math.sin(ang), ny = Math.cos(ang), w = b[8] * e0.s * 1.5;
+    var al = b[5] * (.78 + .5 * pulse) * mul;
+    [[1, .1], [.55, .15], [.2, .3]].forEach(function (p) {
+      var gr = g.createLinearGradient(s.x, s.y, ex, ey); gr.addColorStop(0, 'rgba(' + b[4] + ',' + al * p[1] * 1.6 + ')'); gr.addColorStop(.55, 'rgba(' + b[4] + ',' + al * p[1] * .6 + ')'); gr.addColorStop(1, 'rgba(' + b[4] + ',0)');
+      g.fillStyle = gr; g.beginPath(); g.moveTo(s.x + nx * 1.5, s.y + ny * 1.5); g.lineTo(s.x - nx * 1.5, s.y - ny * 1.5); g.lineTo(ex - nx * w * p[0], ey - ny * w * p[0]); g.lineTo(ex + nx * w * p[0], ey + ny * w * p[0]); g.closePath(); g.fill();
+    });
+    if (mul > .5) { g.globalAlpha = .9; g.drawImage(b[4] === '232,60,255' ? sprites.m : sprites.c, s.x - 26, s.y - 26, 52, 52); g.globalAlpha = 1; }
+  }
+
+  /* LED wall: pixelated flowing colour, the logo is part of the picture (bloom, colour fringe, flicker, LED grid, panel seams) */
+  function drawWall(t, pulse) {
+    var a = toPx(850, 222), b = toPx(1190, 560), w = b.x - a.x, h = b.y - a.y;
+    var cw = 84, ch = Math.max(8, Math.round(cw * h / w));
+    if (wallC.width !== cw || wallC.height !== ch) { wallC.width = cw; wallC.height = ch; }
+    wx.globalCompositeOperation = 'source-over'; wx.fillStyle = '#060818'; wx.fillRect(0, 0, cw, ch); wx.globalCompositeOperation = 'lighter';
+    [['47,243,255', 0], ['232,60,255', 2.1], ['123,77,255', 4.2]].forEach(function (q) {
+      var bx = (.5 + .42 * Math.sin(t * .33 + q[1])) * cw, by = (.5 + .42 * Math.cos(t * .27 + q[1] * 1.3)) * ch, r = cw * .62;
+      var g = wx.createRadialGradient(bx, by, 0, bx, by, r); g.addColorStop(0, 'rgba(' + q[0] + ',' + (.5 + .25 * pulse) + ')'); g.addColorStop(1, 'rgba(' + q[0] + ',0)'); wx.fillStyle = g; wx.fillRect(0, 0, cw, ch);
+    });
+    var bxs = ((t * .18) % 1.4 - .2) * cw, bg = wx.createLinearGradient(bxs - 8, 0, bxs + 8, 0); bg.addColorStop(0, 'rgba(255,255,255,0)'); bg.addColorStop(.5, 'rgba(255,255,255,.2)'); bg.addColorStop(1, 'rgba(255,255,255,0)'); wx.fillStyle = bg; wx.fillRect(0, 0, cw, ch);
+    if (pulse > .75) { wx.fillStyle = 'rgba(255,255,255,' + (pulse - .75) * .3 + ')'; wx.fillRect(0, 0, cw, ch); }
+    ctx.save(); ctx.beginPath(); ctx.rect(a.x, a.y, w, h); ctx.clip();
+    ctx.globalCompositeOperation = 'source-over'; ctx.imageSmoothingEnabled = true; ctx.globalAlpha = .92; ctx.drawImage(wallC, a.x, a.y, w, h); ctx.globalAlpha = 1;
+    ctx.fillStyle = 'rgba(3,4,12,.4)'; ctx.fillRect(a.x, a.y, w, h);
+    if (logoGlow && logoTints) {
+      var L = toPx(1020, 340), lh = 176 * a.s, lw = lh * logoImg.naturalWidth / logoImg.naturalHeight, fl = .9 + .1 * Math.sin(t * 37) * Math.sin(t * 5.3);
+      ctx.globalCompositeOperation = 'lighter';
+      var bl = ctx.createRadialGradient(L.x, L.y, 0, L.x, L.y, lh * .75); bl.addColorStop(0, 'rgba(190,170,255,' + .42 * fl + ')'); bl.addColorStop(1, 'rgba(120,80,255,0)'); ctx.globalAlpha = 1; ctx.fillStyle = bl; ctx.fillRect(L.x - lh, L.y - lh, lh * 2, lh * 2);
+      ctx.globalAlpha = .35; ctx.drawImage(logoTints.c, L.x - lw / 2 - .8 * a.s, L.y - lh / 2, lw, lh); ctx.drawImage(logoTints.m, L.x - lw / 2 + .8 * a.s, L.y - lh / 2, lw, lh);
+      ctx.globalAlpha = fl; ctx.drawImage(logoImg, L.x - lw / 2, L.y - lh / 2, lw, lh); ctx.globalAlpha = 1;
+    }
+    ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = gridPat; ctx.fillRect(a.x, a.y, w, h);
+    ctx.fillStyle = 'rgba(0,0,0,.5)'; for (var k = 1; k < 4; k++) { ctx.fillRect(a.x + w * k / 4 - .5, a.y, 1, h); ctx.fillRect(a.x, a.y + h * k / 4 - .5, w, 1); }
+    ctx.restore();
+    ctx.strokeStyle = 'rgba(130,150,255,.4)'; ctx.lineWidth = 1.5; ctx.strokeRect(a.x, a.y, w, h);
+    var c = toPx(1020, 390), sr = 330 * c.s, sg = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, sr);
+    ctx.globalCompositeOperation = 'lighter'; sg.addColorStop(0, 'rgba(150,110,255,' + (.2 + .14 * pulse) + ')'); sg.addColorStop(1, 'rgba(150,110,255,0)'); ctx.fillStyle = sg; ctx.fillRect(c.x - sr, c.y - sr, sr * 2, sr * 2);
+  }
+
+  function frameBack(t, pulse) {
     var W = SW, H = SH; if (!W) return;
-    mouse.x += (mouse.tx - mouse.x) * .05; mouse.y += (mouse.ty - mouse.y) * .05;
-    var ph = (t * 124 / 60) % 1, pulse = Math.pow(1 - ph, 3);
     ctx.globalCompositeOperation = 'source-over'; ctx.clearRect(0, 0, W, H); ctx.globalCompositeOperation = 'lighter';
     var c = toPx(1020, 360), R = Math.max(W, H) * .62;
     var g = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, R); g.addColorStop(0, 'rgba(110,64,255,' + (.34 + .14 * pulse) + ')'); g.addColorStop(.5, 'rgba(60,30,170,.14)'); g.addColorStop(1, 'rgba(60,30,170,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     var m1 = toPx(560, 640), m2 = toPx(1440, 620);
     [[m1, '232,60,255', .2], [m2, '47,243,255', .16]].forEach(function (q) { var gg = ctx.createRadialGradient(q[0].x, q[0].y, 0, q[0].x, q[0].y, R * .55); gg.addColorStop(0, 'rgba(' + q[1] + ',' + (q[2] + .06 * pulse) + ')'); gg.addColorStop(1, 'rgba(' + q[1] + ',0)'); ctx.fillStyle = gg; ctx.fillRect(0, 0, W, H); });
-    // beams
-    BEAMS.forEach(function (b, i) {
-      var s = toPx(b[0], b[1]), e0 = toPx(b[2], b[3]), dx = e0.x - s.x, dy = e0.y - s.y, dist = Math.hypot(dx, dy);
-      var ang = Math.atan2(dy, dx) + Math.sin(t * b[6] * 6 + i * 1.7) * b[7] + (mouse.x - .5) * .12;
-      var len = dist * 1.55, ex = s.x + Math.cos(ang) * len, ey = s.y + Math.sin(ang) * len, nx = -Math.sin(ang), ny = Math.cos(ang), w = b[8] * e0.s * 1.5;
-      var al = b[5] * (.78 + .5 * pulse);
-      [[1, .1], [.55, .15], [.2, .3]].forEach(function (p) {
-        var gr = ctx.createLinearGradient(s.x, s.y, ex, ey); gr.addColorStop(0, 'rgba(' + b[4] + ',' + al * p[1] * 1.6 + ')'); gr.addColorStop(.55, 'rgba(' + b[4] + ',' + al * p[1] * .6 + ')'); gr.addColorStop(1, 'rgba(' + b[4] + ',0)');
-        ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(s.x + nx * 1.5, s.y + ny * 1.5); ctx.lineTo(s.x - nx * 1.5, s.y - ny * 1.5); ctx.lineTo(ex - nx * w * p[0], ey - ny * w * p[0]); ctx.lineTo(ex + nx * w * p[0], ey + ny * w * p[0]); ctx.closePath(); ctx.fill();
-      });
-      ctx.globalAlpha = .9; ctx.drawImage(b[4] === '232,60,255' ? sprites.m : sprites.c, s.x - 26, s.y - 26, 52, 52); ctx.globalAlpha = 1;
-    });
-    // screen glow
-    var sc = toPx(1020, 356), sr = 300 * sc.s; var sg = ctx.createRadialGradient(sc.x, sc.y, 0, sc.x, sc.y, sr); sg.addColorStop(0, 'rgba(150,110,255,' + (.28 + .18 * pulse) + ')'); sg.addColorStop(1, 'rgba(150,110,255,0)'); ctx.fillStyle = sg; ctx.fillRect(sc.x - sr, sc.y - sr, sr * 2, sr * 2);
-    // fog
-    for (var i = 0; i < 3; i++) { var f = toPx(700 + i * 330, 700), fx = f.x + Math.sin(t * .18 + i * 2) * 70 * f.s, fr = W * .34; ctx.save(); ctx.translate(fx, f.y); ctx.scale(1, .32); var fg = ctx.createRadialGradient(0, 0, 0, 0, 0, fr); var rgb = i === 0 ? '232,60,255' : i === 1 ? '123,77,255' : '47,243,255'; fg.addColorStop(0, 'rgba(' + rgb + ',.22)'); fg.addColorStop(1, 'rgba(' + rgb + ',0)'); ctx.fillStyle = fg; ctx.fillRect(-fr, -fr, fr * 2, fr * 2); ctx.restore(); }
-    // particles
-    for (var k = 0; k < parts.length; k++) { var p = parts[k]; p.y -= p.v * (reduce ? 0 : 1); if (p.y < -60) { p.y = H + 60; p.x = Math.random() * W; } var tw = .5 + .5 * Math.sin(t * p.sp + p.ph); ctx.globalAlpha = p.a * (.35 + .65 * tw) * (.8 + .5 * pulse); ctx.drawImage(sprites[p.c], p.x + (mouse.x - .5) * p.s * 1.5, p.y, p.s, p.s); }
-    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    BEAMS.forEach(function (b, i) { drawBeam(ctx, b, i, t, pulse, 1); });
+    drawWall(t, pulse);
+    ctx.globalCompositeOperation = 'source-over';
   }
-  function loop(now) { if (running && !reduce) frame((now - T0) / 1000); requestAnimationFrame(loop); }
+
+  /* moving colour along the silhouettes' top edge: looks like beams sweeping across the room */
+  function rimGrad(t) {
+    var W = SW, shift = (t * 70) % W, x0 = -shift - W, g = c2.createLinearGradient(x0, 0, x0 + 3 * W, 0);
+    g.addColorStop(0, '#2ff3ff'); g.addColorStop(1 / 6, '#8b6bff'); g.addColorStop(2 / 6, '#ff3df2'); g.addColorStop(3 / 6, '#2ff3ff'); g.addColorStop(4 / 6, '#8b6bff'); g.addColorStop(5 / 6, '#ff3df2'); g.addColorStop(1, '#2ff3ff');
+    return g;
+  }
+
+  function drawDJ(t, pulse, S, ox, oy, rim) {
+    var cx = 1020, bob = Math.sin(t * Math.PI * 124 / 60) * 1.7 * (.6 + .6 * pulse);
+    function X(x) { return ox + x * S; } function Y(y) { return oy + y * S; }
+    // booth + equipment
+    c2.globalCompositeOperation = 'source-over';
+    c2.fillStyle = '#04060a'; c2.fillRect(X(cx - 114), Y(602), 228 * S, 60 * S);
+    c2.fillStyle = '#0c1019'; c2.fillRect(X(cx - 114), Y(595), 228 * S, 8 * S);
+    c2.globalCompositeOperation = 'lighter';
+    var eg = c2.createLinearGradient(X(cx - 114), 0, X(cx + 114), 0); eg.addColorStop(0, 'rgba(47,243,255,.95)'); eg.addColorStop(.5, 'rgba(123,77,255,.95)'); eg.addColorStop(1, 'rgba(232,60,255,.95)');
+    c2.fillStyle = eg; c2.fillRect(X(cx - 114), Y(602), 228 * S, 2.6 * S);
+    for (var i = 0; i < 9; i++) { c2.fillStyle = (i % 3 === 1 ? 'rgba(232,60,255,' : 'rgba(47,243,255,') + (.4 + .5 * Math.abs(Math.sin(t * 2.3 + i * 1.7))) + ')'; c2.fillRect(X(cx - 100 + i * 25), Y(618), 14 * S, 3 * S); }
+    [-64, 64].forEach(function (dx, k) {
+      var px = X(cx + dx), py = Y(592);
+      var gl = c2.createRadialGradient(px, py - 4 * S, 0, px, py - 4 * S, 54 * S); gl.addColorStop(0, 'rgba(47,243,255,' + (.28 + .1 * pulse) + ')'); gl.addColorStop(1, 'rgba(47,243,255,0)'); c2.fillStyle = gl; c2.fillRect(px - 54 * S, py - 58 * S, 108 * S, 108 * S);
+      c2.strokeStyle = 'rgba(160,245,255,.9)'; c2.lineWidth = 1.6 * S; c2.setLineDash([10 * S, 7 * S]); c2.lineDashOffset = -t * 44 * S * (k ? -1 : 1);
+      c2.beginPath(); c2.ellipse(px, py, 31 * S, 6.8 * S, 0, 0, 6.2832); c2.stroke(); c2.setLineDash([]);
+    });
+    c2.fillStyle = '#0e1420'; c2.globalCompositeOperation = 'source-over'; c2.fillRect(X(cx - 19), Y(588), 38 * S, 9 * S);
+    c2.globalCompositeOperation = 'lighter';
+    for (i = 0; i < 6; i++) { var hh = (2 + 6 * Math.abs(Math.sin(t * 3.1 + i * 1.3))) * S; c2.fillStyle = i > 3 ? 'rgba(255,80,160,.95)' : 'rgba(80,255,170,.9)'; c2.fillRect(X(cx - 16 + i * 6), Y(596) - hh, 3.4 * S, hh); }
+    c2.globalCompositeOperation = 'source-over';
+
+    // silhouette: torso, head, headphones, arms
+    var fp = new Path2D(), sp = new Path2D(), bobY = bob;
+    fp.moveTo(X(cx - 46), Y(606)); fp.lineTo(X(cx - 41), Y(574)); fp.quadraticCurveTo(X(cx - 37), Y(556 + bobY), X(cx - 14), Y(552 + bobY)); fp.lineTo(X(cx - 9), Y(547 + bobY)); fp.lineTo(X(cx + 9), Y(547 + bobY)); fp.lineTo(X(cx + 14), Y(552 + bobY)); fp.quadraticCurveTo(X(cx + 37), Y(556 + bobY), X(cx + 41), Y(574)); fp.lineTo(X(cx + 46), Y(606)); fp.closePath();
+    fp.moveTo(X(cx + 15), Y(528 + bobY)); fp.ellipse(X(cx), Y(528 + bobY), 15 * S, 17.5 * S, 0, 0, 6.2832);
+    fp.moveTo(X(cx - 11.5), Y(531 + bobY)); fp.ellipse(X(cx - 16), Y(531 + bobY), 4.6 * S, 7.6 * S, 0, 0, 6.2832);
+    fp.moveTo(X(cx + 20.6), Y(531 + bobY)); fp.ellipse(X(cx + 16), Y(531 + bobY), 4.6 * S, 7.6 * S, 0, 0, 6.2832);
+    var lhx = cx - 66 + Math.sin(t * 1.3) * 7, lhy = 589 + Math.sin(t * 2.2) * 1.5;
+    var rhx = cx + 10 + 56 * (.5 + .5 * Math.sin(t * .8)), rhy = 588, rs = Math.max(0, Math.sin(t * .45) - .82) / .18; rhx = lerp(rhx, cx + 17, rs); rhy = lerp(rhy, 538, rs);
+    [[cx - 36, 570 + bobY, lhx, lhy, -1], [cx + 36, 570 + bobY, rhx, rhy, 1]].forEach(function (a) {
+      var mx = (a[0] + a[2]) / 2 + a[4] * 11, my = (a[1] + a[3]) / 2 + 9;
+      sp.moveTo(X(a[0]), Y(a[1])); sp.lineTo(X(mx), Y(my)); sp.lineTo(X(a[2]), Y(a[3]));
+      fp.moveTo(X(a[2]) + 6.2 * S, Y(a[3])); fp.ellipse(X(a[2]), Y(a[3]), 6.2 * S, 5.6 * S, 0, 0, 6.2832);
+    });
+    function pass(col, off) {
+      c2.save(); c2.translate(-off * .5 * S, -off * S); c2.fillStyle = col; c2.strokeStyle = col; c2.lineCap = 'round'; c2.lineJoin = 'round';
+      c2.fill(fp); c2.lineWidth = 13 * S; c2.stroke(sp);
+      c2.lineWidth = 3.2 * S; c2.beginPath(); c2.arc(X(cx), Y(528 + bobY), 18.4 * S, Math.PI * 1.06, Math.PI * 1.94); c2.stroke();
+      c2.restore();
+    }
+    c2.globalAlpha = .95; pass(rim, 2.6); c2.globalAlpha = 1; pass('#000', 0);
+    // tiny LED on the headphone cup
+    c2.globalCompositeOperation = 'lighter'; c2.globalAlpha = .9; c2.drawImage(sprites.c, X(cx + 16) - 6 * S, Y(531 + bobY) - 6 * S, 12 * S, 12 * S); c2.globalAlpha = 1; c2.globalCompositeOperation = 'source-over';
+  }
+
+  function drawRow(row, t, pulse, S, ox, oy, rim) {
+    var fp = new Path2D(), sp = new Path2D(), s = row.s * S, ang = t * Math.PI * 124 / 60 / 2, phones = [];
+    for (var i = 0; i < row.people.length; i++) {
+      var p = row.people[i], x = ox + p.x * S, cy = oy + p.y * S + Math.sin(ang + p.ph) * 2.6 * s * (.55 + .7 * pulse), hr = p.hr * s;
+      fp.moveTo(x + hr * .95, cy); fp.ellipse(x, cy, hr * .95, hr * 1.06, 0, 0, 6.2832);
+      fp.moveTo(x + 34 * s, cy + 46 * s); fp.ellipse(x, cy + 46 * s, 34 * s, 40 * s, 0, 0, 6.2832);
+      if (p.hair) { fp.moveTo(x + hr * 1.02, cy + hr * .8); fp.ellipse(x, cy + hr * .8, hr * 1.02, hr * 1.1, 0, 0, 6.2832); }
+      for (var a = 0; a < p.arm; a++) {
+        var side = a ? -p.side : p.side, sx = x + side * 18 * s, sy = cy + 34 * s, wv = Math.sin(t * p.w + p.ph + a) * 10 * s;
+        var hx = x + side * (22 + p.dx[a]) * s + wv, hy = cy - p.up[a] * s, ex = sx + side * (14 + p.dx[a] * .5) * s + wv * .3, ey = sy - p.up[a] * .45 * s;
+        sp.moveTo(sx, sy); sp.lineTo(ex, ey); sp.lineTo(hx, hy);
+        fp.moveTo(hx + 6.5 * s, hy - 3 * s); fp.ellipse(hx, hy - 3 * s, 6.5 * s, 7.5 * s, 0, 0, 6.2832);
+        if (p.phone === a) phones.push(hx, hy - 14 * s, s);
+      }
+    }
+    c2.lineCap = 'round'; c2.lineJoin = 'round'; c2.lineWidth = 9 * s;
+    c2.save(); c2.translate(0, -2.2 * s); c2.globalAlpha = row.rim * (.8 + .5 * pulse); c2.fillStyle = rim; c2.strokeStyle = rim; c2.fill(fp); c2.stroke(sp); c2.restore(); c2.globalAlpha = 1;
+    c2.fillStyle = row.f; c2.strokeStyle = row.f; c2.fillRect(0, oy + (row.y + 40 * row.s) * S, SW, SH); c2.fill(fp); c2.stroke(sp);
+    if (phones.length) {
+      c2.globalCompositeOperation = 'lighter';
+      for (var k = 0; k < phones.length; k += 3) {
+        var px = phones[k], py = phones[k + 1], ps = phones[k + 2]; c2.globalAlpha = .55; c2.drawImage(sprites.w, px - 22 * ps, py - 22 * ps, 44 * ps, 44 * ps);
+        c2.globalAlpha = .95; c2.fillStyle = 'rgba(214,228,255,1)'; c2.fillRect(px - 4 * ps, py - 7 * ps, 8 * ps, 13 * ps);
+      }
+      c2.globalAlpha = 1; c2.globalCompositeOperation = 'source-over';
+    }
+  }
+  function fog(t, y, alpha, seed) {
+    var f = toPx(0, y), fr = SW * .42;
+    c2.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < 2; i++) {
+      var fx = SW * (.25 + .5 * i) + Math.sin(t * .15 + seed + i * 2) * 90 * f.s, rgb = (i + seed) % 2 ? '123,77,255' : '232,60,255';
+      c2.save(); c2.translate(fx, f.y); c2.scale(1, .22); var fg = c2.createRadialGradient(0, 0, 0, 0, 0, fr); fg.addColorStop(0, 'rgba(' + rgb + ',' + alpha + ')'); fg.addColorStop(1, 'rgba(' + rgb + ',0)'); c2.fillStyle = fg; c2.fillRect(-fr, -fr, fr * 2, fr * 2); c2.restore();
+    }
+    c2.globalCompositeOperation = 'source-over';
+  }
+
+  function frameFront(t, pulse) {
+    var W = SW, H = SH; if (!W) return;
+    c2.globalCompositeOperation = 'source-over'; c2.clearRect(0, 0, W, H);
+    var M = toPx(0, 0), S = M.s, ox = M.x, oy = M.y, rim = rimGrad(t);
+    drawDJ(t, pulse, S, ox, oy, rim);
+    drawRow(ROWS[0], t, pulse, S, ox, oy, rim); drawRow(ROWS[1], t, pulse, S, ox, oy, rim);
+    fog(t, 700, .2 + .06 * pulse, 0);
+    drawRow(ROWS[2], t, pulse, S, ox, oy, rim); drawRow(ROWS[3], t, pulse, S, ox, oy, rim);
+    fog(t, 860, .1, 1);
+    drawRow(ROWS[4], t, pulse, S, ox, oy, rim); drawRow(ROWS[5], t, pulse, S, ox, oy, rim);
+    // haze in front of the stage: faint beams cross the wall and the DJ
+    c2.globalCompositeOperation = 'lighter';
+    [0, 1, 4].forEach(function (i) { drawBeam(c2, BEAMS[i], i, t, pulse, .2); });
+    for (var k = 0; k < parts.length; k++) { var p = parts[k]; p.y -= p.v * (reduce ? 0 : 1); if (p.y < -60) { p.y = H + 60; p.x = Math.random() * W; } var tw = .5 + .5 * Math.sin(t * p.sp + p.ph); c2.globalAlpha = p.a * (.35 + .65 * tw) * (.8 + .5 * pulse); c2.drawImage(sprites[p.c], p.x + (mouse.x - .5) * p.s * 1.5, p.y, p.s, p.s); }
+    c2.globalAlpha = 1; c2.globalCompositeOperation = 'source-over';
+    var vg = c2.createRadialGradient(W * .6, H * .5, Math.min(W, H) * .35, W * .6, H * .5, Math.max(W, H) * .8); vg.addColorStop(0, 'rgba(3,4,9,0)'); vg.addColorStop(1, 'rgba(3,4,9,.55)'); c2.fillStyle = vg; c2.fillRect(0, 0, W, H);
+  }
+  function renderAll(t) { mouse.x += (mouse.tx - mouse.x) * .05; var pulse = Math.pow(1 - (t * 124 / 60) % 1, 3); frameBack(t, pulse); frameFront(t, pulse); }
+  function loop(now) { if (running && !reduce) renderAll((now - T0) / 1000); requestAnimationFrame(loop); }
   window.addEventListener('pointermove', function (e) { mouse.tx = e.clientX / innerWidth; mouse.ty = e.clientY / innerHeight; }, { passive: true });
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { running = es[0].isIntersecting && !document.hidden; }).observe(stage);
   document.addEventListener('visibilitychange', function () { running = !document.hidden; });
   fitStage(); window.addEventListener('resize', fitStage);
-  if (reduce) frame(3); else requestAnimationFrame(loop);
+  if (reduce) renderAll(3); else requestAnimationFrame(loop);
 
   /* ---------- Private invite form (Netlify Forms, AJAX) ---------- */
   var form = $('#invite-form'), msg = $('#form-msg');
