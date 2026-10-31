@@ -339,7 +339,7 @@ button{font:inherit;color:inherit}
   .nav.open{clip-path:circle(150% at calc(100% - 40px) 40px);visibility:visible}
   .nav a{font:300 clamp(2rem,9vw,3rem)/1.2 var(--fd);letter-spacing:.08em;padding:.4rem 0;opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease),color .3s}
   .nav.open a{opacity:1;transform:none}
-  .nav.open a:nth-child(1){transition-delay:.2s}.nav.open a:nth-child(2){transition-delay:.28s}.nav.open a:nth-child(3){transition-delay:.36s}.nav.open a:nth-child(4){transition-delay:.44s}.nav.open a:nth-child(5){transition-delay:.52s}.nav.open a:nth-child(6){transition-delay:.6s}
+  .nav.open a:nth-child(1){transition-delay:.2s}.nav.open a:nth-child(2){transition-delay:.28s}.nav.open a:nth-child(3){transition-delay:.36s}.nav.open a:nth-child(4){transition-delay:.44s}.nav.open a:nth-child(5){transition-delay:.52s}.nav.open a:nth-child(6){transition-delay:.6s}.nav.open a:nth-child(7){transition-delay:.68s}
   .nav a::after{display:none}
   .nav__cta{margin-top:18px;font-size:.8rem!important;padding:1rem 1.6rem!important;border-color:var(--cyan)!important}
   .hero{display:flex;flex-direction:column;justify-content:flex-start;min-height:0;padding-top:calc(var(--head) + 2vh);padding-bottom:28px}
@@ -402,6 +402,7 @@ button{font:inherit;color:inherit}
   <div class="header__in">
     <a class="brand" href="#top" aria-label="XINIX Events — home"><img src="assets/logo-full.png" alt="XINIX Events"></a>
     <nav class="nav" id="nav" aria-label="Primary">
+      <a href="#top" data-nav="hero">Home</a>
       <a href="#events" data-nav="events">Events</a>
       <a href="#experience" data-nav="experience">Experience</a>
       <a href="#about" data-nav="about">About</a>
@@ -724,7 +725,7 @@ button{font:inherit;color:inherit}
     $$('.rv').forEach(function (n) { ro.observe(n); });
     var map = {}; $$('[data-nav]').forEach(function (a) { map[a.getAttribute('data-nav')] = a; });
     var so = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { $$('[data-nav]').forEach(function (a) { a.classList.remove('active'); }); var a = map[e.target.id]; if (a) a.classList.add('active'); } }); }, { rootMargin: '-45% 0px -50% 0px' });
-    ['events', 'experience', 'about', 'contact'].forEach(function (id) { var s = document.getElementById(id); if (s) so.observe(s); });
+    ["hero","events","experience","about","contact"].forEach(function (id) { var s = document.getElementById(id); if (s) so.observe(s); });
   } else { $$('.rv').forEach(function (n) { n.classList.add('in'); }); }
 
   /* ---------- Pointer effects (desktop) ---------- */
